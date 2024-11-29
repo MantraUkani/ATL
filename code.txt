@@ -1,0 +1,28 @@
+#include <Servo.h>
+
+const int irSensorPin = 7; // IR sensor output pin
+const int servoPin = 6;    // Servo motor control pin
+
+Servo gateServo;
+
+void setup() {
+  pinMode(irSensorPin, INPUT); // Set IR sensor pin as input
+  gateServo.attach(servoPin);  // Attach servo to control pin
+  gateServo.write(0);          // Start with the gate closed (0 degrees)
+  Serial.begin(9600);          // For debugging
+}
+
+void loop() {
+  int irValue = digitalRead(irSensorPin); // Read IR sensor output
+  Serial.print("IR Sensor Value: ");
+  Serial.println(irValue);
+
+  if (irValue == LOW) { // Object detected
+    gateServo.write(90); // Open the gate (90 degrees)
+    delay(5000);         // Keep gate open for 5 seconds
+  } else {
+    gateServo.write(0);  // Close the gate (0 degrees)
+  }
+
+  delay(100); // Short delay before next loop
+}
